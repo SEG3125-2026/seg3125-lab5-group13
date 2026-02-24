@@ -1,0 +1,88 @@
+@font-face{
+      font-family: "ND-logos";
+      src: url("../fonts/ND LOGOS REGULAR.ttf");
+      font-display: swap;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body{
+      padding-top: 84px;
+      background: var(--bs-gray-100);
+    }
+
+    .brand-font{
+      font-family: "ND-logos", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      letter-spacing: .5px;
+    }
+
+    .section-pad{ padding-top: 3rem; padding-bottom: 3rem; }
+
+    .card-select{ cursor: pointer; transition: transform .08s ease-in-out; }
+    .card-select:active{ transform: scale(0.99); }
+    .card-select.selected{
+      border-color: var(--bs-primary) !important;
+      box-shadow: 0 0.25rem 0.75rem rgba(13,110,253,.18);
+    }
+
+    .mini-muted{ color: var(--bs-gray-600); }
+
+    .sticky-cta{
+      position: sticky;
+      bottom: 0;
+      z-index: 1020;
+      background: rgba(248,249,250,.92);
+      backdrop-filter: blur(6px);
+      border-top: 1px solid rgba(0,0,0,.08);
+    }
+  
+
+    .form-control:hover, .form-select:hover { border-color: rgba(13,110,253,.55); }
+    .form-control:focus, .form-select:focus {
+      box-shadow: 0 0 0 .2rem rgba(13,110,253,.18);
+      transform: scale(1.01);
+    }
+
+    section:target{
+      outline: 3px solid rgba(13,110,253,.22);
+      outline-offset: -3px;
+      border-radius: 1rem;
+    }
+
+    .calendar-weekdays, .calendar-grid{
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: .25rem;
+    }
+
+    .calendar-weekdays > div{
+      text-align: center;
+      padding: .25rem 0;
+    }
+
+    .cal-day{
+      width: 100%;
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: .6rem;
+      padding: .45rem 0;
+      background: #fff;
+      transition: transform .08s ease-in-out, box-shadow .08s ease-in-out;
+    }
+
+    .cal-day:hover{ transform: translateY(-1px); box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,.06); }
+
+    .cal-day:disabled{
+      opacity: .45;
+      background: #f8f9fa;
+      box-shadow: none;
+      transform: none;
+      cursor: not-allowed;
+    }
+
+    .cal-day.selected{
+      border-color: var(--bs-primary);
+      box-shadow: 0 0.25rem 0.75rem rgba(13,110,253,.18);
+      font-weight: 700;
+    }
+
+    [id]:target{ scroll-margin-top: 96px; }
