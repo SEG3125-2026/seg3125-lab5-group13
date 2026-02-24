@@ -252,8 +252,8 @@ const serviceCards = [...document.querySelectorAll("[data-service-card]")];
     function validateCard(){
       const raw = ccNumberEl.value.trim();
       const digits = raw.replace(/[^0-9]/g, "");
-      if(!raw || !cardRegex.test(raw) || digits.length < 13 || digits.length > 19 || !luhnOk(digits)){
-        markInvalid(ccNumberEl, "Please enter a valid card number.");
+      if(!raw || !cardRegex.test(raw) || digits.length !== 16 || !luhnOk(digits)){
+        markInvalid(ccNumberEl, "Please enter a valid 16-digit card number.");
         return false;
       }
       markValid(ccNumberEl);
@@ -483,7 +483,63 @@ const serviceCards = [...document.querySelectorAll("[data-service-card]")];
 
     timeEl.addEventListener("input", () => { hide(timeError); confirmation.classList.add("d-none"); updateAll(); });
 
-    [nameEl, emailEl, phoneEl, ccNumberEl, ccExpEl, ccCvvEl, ccNameEl].forEach(el => {
+    
+    function caretPosFromDigits(value, digitCount){
+      if(digitCount <= 0) return 0;
+      let count = 0;
+      for(let i = 0; i < value.length; i++){
+        const ch = value[i];
+        if(ch >= "0" && ch <= "9"){
+          count += 1;
+          if(count === digitCount) return i + 1;
+        }
+      }
+      return value.length;
+    }
+
+    function maskCardNumber(){
+      const old = ccNumberEl.value;
+      const cur = ccNumberEl.selectionStart || 0;
+      const digitsBefore = old.slice(0, cur).replace(/\D/g, "").length;
+
+      const digits = old.replace(/\D/g, "").slice(0, 16);
+      const formatted = digits.replace(/(.{4})/g, "$1 ").trim();
+
+      ccNumberEl.value = formatted;
+
+      let newPos = caretPosFromDigits(formatted, digitsBefore);
+      if(formatted[newPos] === " ") newPos += 1;
+      ccNumberEl.setSelectionRange(newPos, newPos);
+    }
+
+    function maskExpiry(e){
+      const old = ccExpEl.value;
+      const cur = ccExpEl.selectionStart || 0;
+      const digitsBefore = old.slice(0, cur).replace(/\D/g, "").length;
+
+      const digits = old.replace(/\D/g, "").slice(0, 4);
+      const isDelete = e && e.inputType && e.inputType.startsWith("delete");
+
+      let formatted = "";
+      if(digits.length < 2){
+        formatted = digits;
+      }else if(digits.length === 2){
+        formatted = isDelete ? digits : digits + "/";
+      }else{
+        formatted = digits.slice(0, 2) + "/" + digits.slice(2);
+      }
+
+      ccExpEl.value = formatted;
+
+      let newPos = caretPosFromDigits(formatted, digitsBefore);
+      if(formatted[2] === "/" && newPos === 2) newPos = 3;
+      ccExpEl.setSelectionRange(newPos, newPos);
+    }
+
+    ccNumberEl.addEventListener("input", maskCardNumber);
+    ccExpEl.addEventListener("input", maskExpiry);
+
+[nameEl, emailEl, phoneEl, ccNumberEl, ccExpEl, ccCvvEl, ccNameEl].forEach(el => {
       el.addEventListener("input", () => {
         confirmation.classList.add("d-none");
         updateAll();
