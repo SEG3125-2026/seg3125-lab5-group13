@@ -619,9 +619,3 @@ const serviceCards = [...document.querySelectorAll("[data-service-card]")];
 
     renderCalendar();
     updateAll();
-
-
-function validateCardNumber(value) {
-  const digits = (value || "").replace(/\D/g, "");
-  return /^\d{16}$/.test(digits);
-}
